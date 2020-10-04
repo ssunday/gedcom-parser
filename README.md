@@ -2,8 +2,6 @@
 
 Script to parse GEDCOM files into something I can use without getting another application (such as a CSV).
 
-The script doesn't really exist yet, but it will!
-
 ## Requirements
 
 - [Ruby](./.ruby-version)
@@ -12,6 +10,12 @@ The script doesn't really exist yet, but it will!
 ## Setup
 
 1. `bundle install`
+1. Download and set a sample GEDCOM file as `file.ged`.
+1. Run `ruby gedcom_to_csv.rb` and see the CSV generate as `output.csv`
+
+## Linting
+
+`bundle exec rubocop -a *.rb`
 
 ## TODO
 
