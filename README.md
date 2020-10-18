@@ -15,7 +15,7 @@ Script to parse [GEDCOM](https://en.wikipedia.org/wiki/GEDCOM) files into someth
 
 ## Linting
 
-`bundle exec rubocop -a *.rb`
+`bundle exec rubocop -a **/*.rb`
 
 ## GEDCOM Samples
 

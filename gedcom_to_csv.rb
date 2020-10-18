@@ -1,9 +1,7 @@
 require 'csv'
+require_relative './lib/constants'
 
-HEADERS = %w[Name Sex].freeze
-
-NAME = '1 NAME '.freeze
-SEX = '1 SEX '.freeze
+HEADERS = %w[Name Sex BirthDate BirthPlace].freeze
 
 def parse_row_value(line, deliminator)
   line
@@ -11,6 +9,10 @@ def parse_row_value(line, deliminator)
     .last
     .strip
     .gsub('/', '')
+end
+
+def in_sub_data?(line)
+  line.split('2 ').first
 end
 
 def add_to_csv?(line, new_row)
@@ -21,18 +23,32 @@ def add_to_csv?(line, new_row)
   line.include?('0 @I')
 end
 
+def parse_ged_line(new_row, line, in_birth_data)
+  new_row[0] = parse_row_value(line, NAME) if line.include?(NAME)
+  new_row[1] = parse_row_value(line, SEX) if line.include?(SEX)
+  new_row[2] = parse_row_value(line, SUB_DATE) if in_birth_data && line.include?(SUB_DATE)
+  new_row[3] = parse_row_value(line, SUB_PLACE) if in_birth_data && line.include?(SUB_PLACE)
+end
+
 CSV.open('./output.csv', 'w+') do |csv|
   csv << HEADERS
 
   new_row = []
+  in_birth_data = false
 
   File.readlines('./file.ged').each do |line|
     if add_to_csv?(line, new_row)
       csv << new_row
       new_row = []
+      in_birth_data = false
     end
 
-    new_row[0] = parse_row_value(line, NAME) if line.include?(NAME)
-    new_row[1] = parse_row_value(line, SEX) if line.include?(SEX)
+    if line.include?(BIRTH_START)
+      in_birth_data = true
+    elsif in_birth_data && !in_sub_data?(line)
+      in_birth_data = false
+    end
+
+    parse_ged_line(new_row, line, in_birth_data)
   end
 end

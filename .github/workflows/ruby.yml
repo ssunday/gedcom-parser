@@ -12,4 +12,4 @@ jobs:
     - uses: ruby/setup-ruby@v1
     - run: bundle install
     - name: Rubocop
-      run: bundle exec rubocop -F *.rb
+      run: bundle exec rubocop -F **/*.rb
